@@ -1,6 +1,6 @@
 # TestimonialCarousel — React Interactive Review Slider
 
-> A clean, interactive testimonial carousel built with React — demonstrating component decomposition, stateful navigation, and responsive UI design with Tailwind CSS.
+> A clean, interactive testimonial carousel built with React , demonstrating component decomposition, stateful navigation, and responsive UI design with Tailwind CSS.
 
 ---
 
@@ -21,9 +21,9 @@
 
 ## Overview
 
-TestimonialCarousel is a React application that renders an interactive, navigable review slider across **5 reviewer profiles**. Users can cycle through testimonials using previous/next controls or jump to a random entry via a **"Surprise Me"** button — all driven by a single piece of `useState`.
+TestimonialCarousel is a React application that renders an interactive, navigable review slider across **5 reviewer profiles**. Users can cycle through testimonials using previous/next controls or jump to a random entry via a **"Surprise Me"** button , all driven by a single piece of `useState`.
 
-The goal was to demonstrate the fundamentals of React done right: **clean component separation**, **controlled state**, **prop-driven rendering**, and a **polished UI** — without unnecessary complexity.
+The goal was to demonstrate the fundamentals of React done right: **clean component separation**, **controlled state**, **prop-driven rendering**, and a **polished UI** , without unnecessary complexity.
 
 ---
 
@@ -33,10 +33,10 @@ The goal was to demonstrate the fundamentals of React done right: **clean compon
 |---|---|
 | **React 19** | Functional components, `useState` for carousel index management |
 | **Tailwind CSS** | Utility-first styling — responsive layout, violet accent palette, hover effects |
-| **react-icons** | `MdArrowBackIosNew`, `MdNavigateNext`, `PiQuotesFill` — semantic icon set |
+| **react-icons** | `MdArrowBackIosNew`, `MdNavigateNext`, `PiQuotesFill` , semantic icon set |
 | **Create React App** | Build tooling, dev server, and test runner scaffold |
 
-> **Design Decision:** All state lives in a single `useState` call inside `Testimonial` — the active reviewer index. No prop drilling beyond one level, no context overhead. Right-sized architecture for the problem.
+> **Design Decision:** All state lives in a single `useState` call inside `Testimonial`, the active reviewer index. No prop drilling beyond one level, no context overhead. Right-sized architecture for the problem.
 
 ---
 
@@ -48,12 +48,13 @@ src/
 │   ├── Heading.js        # Page title with decorative violet underline
 │   ├── Information.js    # Reviewer profile — avatar, name, role, quote
 │   └── Testimonial.js    # Carousel shell — state, navigation, Surprise Me
+├── public
 ├── data.js               # Static reviewer data — 5 entries with name, job, image, text
 ├── App.js                # Root layout — composes Heading + Testimonial
 └── index.js              # React root entry point
 ```
 
-**Architecture pattern:** `Testimonial` owns the `id` state and passes it to `Information` as a prop. `Information` performs a direct index lookup (`reviews[props.id - 1]`) to render the correct profile — no filtering, no memoization overhead, just a clean array access.
+**Architecture pattern:** `Testimonial` owns the `id` state and passes it to `Information` as a prop. `Information` performs a direct index lookup (`reviews[props.id - 1]`) to render the correct profile ,no filtering, no memoization overhead, just a clean array access.
 
 ---
 
@@ -61,7 +62,7 @@ src/
 
 **Stateful Carousel Navigation**
 
-`Testimonial` holds `id` in `useState(1)`. `prevHandler` and `nextHandler` implement circular navigation — wrapping from index 1 → `reviews.length` and back — ensuring the carousel never hits a dead end.
+`Testimonial` holds `id` in `useState(1)`. `prevHandler` and `nextHandler` implement circular navigation , wrapping from index 1 → `reviews.length` and back , ensuring the carousel never hits a dead end.
 
 **Random Entry via "Surprise Me"**
 
@@ -73,20 +74,20 @@ src/
 
 **Offset Avatar Shadow Effect**
 
-Each reviewer's avatar sits over a violet circle shifted by `top: -6px, left: 10px` with `z-index: -10` — a CSS layering trick that creates a stylized shadow without any image manipulation or external dependency.
+Each reviewer's avatar sits over a violet circle shifted by `top: -6px, left: 10px` with `z-index: -10` , a CSS layering trick that creates a stylized shadow without any image manipulation or external dependency.
 
 **Responsive Layout**
 
-The card uses `w-[85vw] md:w-[700px]` — fluid on mobile, fixed-width on desktop — paired with `hover:shadow-xl transition-all duration-700` for a subtle depth effect on interaction.
+The card uses `w-[85vw] md:w-[700px]` , fluid on mobile, fixed-width on desktop , paired with `hover:shadow-xl transition-all duration-700` for a subtle depth effect on interaction.
 
 ---
 
 ## Key Insights
 
-- **Single source of truth:** One `useState` in `Testimonial` drives the entire UI — what's displayed, which buttons are active, what the "Surprise Me" pick returns. Minimal state, maximum control.
-- **Circular navigation without libraries:** Wrapping prev/next at array boundaries with a simple conditional is idiomatic React — no carousel library, no dependency bloat.
+- **Single source of truth:** One `useState` in `Testimonial` drives the entire UI , what's displayed, which buttons are active, what the "Surprise Me" pick returns. Minimal state, maximum control.
+- **Circular navigation without libraries:** Wrapping prev/next at array boundaries with a simple conditional is idiomatic React , no carousel library, no dependency bloat.
 - **Component responsibility is clear:** `Heading` renders copy, `Information` renders data, `Testimonial` owns behavior. Each component does one thing and is easy to replace or extend.
-- **Tailwind over custom CSS:** Zero custom class names needed beyond the CRA defaults — Tailwind utilities compose into a production-quality UI without a single `.scss` file.
+- **Tailwind over custom CSS:** Zero custom class names needed beyond the CRA defaults , Tailwind utilities compose into a production-quality UI without a single `.scss` file.
 
 ---
 
@@ -133,7 +134,7 @@ npm run build
 
 ## Result and Conclusion
 
-TestimonialCarousel demonstrates that React fundamentals — applied cleanly — produce a professional, interactive UI with very little code. The project keeps state minimal, components focused, and styling fast with Tailwind.
+TestimonialCarousel demonstrates that React fundamentals applied cleanly to produce a professional, interactive UI with very little code. The project keeps state minimal, components focused, and styling fast with Tailwind.
 
 **Key achievements:**
 - ✅ Circular prev/next navigation with zero edge-case bugs
