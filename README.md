@@ -1,70 +1,168 @@
-# Getting Started with Create React App
+# TestimonialCarousel — React Interactive Review Slider
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> A clean, interactive testimonial carousel built with React — demonstrating component decomposition, stateful navigation, and responsive UI design with Tailwind CSS.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+- [Overview](#overview)
+- [Tools and Technologies](#tools-and-technologies)
+- [Project Structure](#project-structure)
+- [Methods](#methods)
+- [Key Insights](#key-insights)
+- [Output](#output)
+- [How to Run This Project](#how-to-run-this-project)
+- [Result and Conclusion](#result-and-conclusion)
+- [Future Work](#future-work)
+- [Author and Contact](#author-and-contact)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Overview
 
-### `npm test`
+TestimonialCarousel is a React application that renders an interactive, navigable review slider across **5 reviewer profiles**. Users can cycle through testimonials using previous/next controls or jump to a random entry via a **"Surprise Me"** button — all driven by a single piece of `useState`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The goal was to demonstrate the fundamentals of React done right: **clean component separation**, **controlled state**, **prop-driven rendering**, and a **polished UI** — without unnecessary complexity.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tools and Technologies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Technology | Purpose |
+|---|---|
+| **React 19** | Functional components, `useState` for carousel index management |
+| **Tailwind CSS** | Utility-first styling — responsive layout, violet accent palette, hover effects |
+| **react-icons** | `MdArrowBackIosNew`, `MdNavigateNext`, `PiQuotesFill` — semantic icon set |
+| **Create React App** | Build tooling, dev server, and test runner scaffold |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> **Design Decision:** All state lives in a single `useState` call inside `Testimonial` — the active reviewer index. No prop drilling beyond one level, no context overhead. Right-sized architecture for the problem.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+├── components/
+│   ├── Heading.js        # Page title with decorative violet underline
+│   ├── Information.js    # Reviewer profile — avatar, name, role, quote
+│   └── Testimonial.js    # Carousel shell — state, navigation, Surprise Me
+├── data.js               # Static reviewer data — 5 entries with name, job, image, text
+├── App.js                # Root layout — composes Heading + Testimonial
+└── index.js              # React root entry point
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Architecture pattern:** `Testimonial` owns the `id` state and passes it to `Information` as a prop. `Information` performs a direct index lookup (`reviews[props.id - 1]`) to render the correct profile — no filtering, no memoization overhead, just a clean array access.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Methods
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Stateful Carousel Navigation**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`Testimonial` holds `id` in `useState(1)`. `prevHandler` and `nextHandler` implement circular navigation — wrapping from index 1 → `reviews.length` and back — ensuring the carousel never hits a dead end.
 
-### Code Splitting
+**Random Entry via "Surprise Me"**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`surpriseHandler` fires `Math.floor(Math.random() * reviews.length) + 1` directly into the state setter, producing a 1-indexed random pick in a single line.
 
-### Analyzing the Bundle Size
+**Prop-Driven Profile Rendering**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+`Information` receives only `id` and resolves all display data from `data.js` internally. This keeps the parent lean and makes `Information` independently testable with any valid id.
 
-### Making a Progressive Web App
+**Offset Avatar Shadow Effect**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Each reviewer's avatar sits over a violet circle shifted by `top: -6px, left: 10px` with `z-index: -10` — a CSS layering trick that creates a stylized shadow without any image manipulation or external dependency.
 
-### Advanced Configuration
+**Responsive Layout**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The card uses `w-[85vw] md:w-[700px]` — fluid on mobile, fixed-width on desktop — paired with `hover:shadow-xl transition-all duration-700` for a subtle depth effect on interaction.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Key Insights
 
-### `npm run build` fails to minify
+- **Single source of truth:** One `useState` in `Testimonial` drives the entire UI — what's displayed, which buttons are active, what the "Surprise Me" pick returns. Minimal state, maximum control.
+- **Circular navigation without libraries:** Wrapping prev/next at array boundaries with a simple conditional is idiomatic React — no carousel library, no dependency bloat.
+- **Component responsibility is clear:** `Heading` renders copy, `Information` renders data, `Testimonial` owns behavior. Each component does one thing and is easy to replace or extend.
+- **Tailwind over custom CSS:** Zero custom class names needed beyond the CRA defaults — Tailwind utilities compose into a production-quality UI without a single `.scss` file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## Output
+
+| View | Description |
+|---|---|
+| **Default Load** | Card renders reviewer #1 with avatar, name, job title, and review text |
+| **Navigation** | Prev/Next arrows cycle through 5 reviewers with circular wrap-around |
+| **Surprise Me** | Button picks a random reviewer index and re-renders the card instantly |
+| **Hover Effect** | Card lifts with `shadow-xl` on hover — smooth 700ms transition |
+| **Responsive** | 85vw on mobile, fixed 700px on md+ breakpoints |
+
+---
+
+## How to Run This Project
+
+**Prerequisites:** Node.js (v14 or higher) and npm
+
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/ManasGulati/testimonial-carousel.git
+cd testimonial-carousel
+```
+
+**Step 2: Install dependencies**
+```bash
+npm install
+```
+
+**Step 3: Start the development server**
+```bash
+npm start
+```
+
+Opens at [http://localhost:3000](http://localhost:3000). No API key or backend required — all data is local.
+
+**Step 4: Build for production (optional)**
+```bash
+npm run build
+```
+
+---
+
+## Result and Conclusion
+
+TestimonialCarousel demonstrates that React fundamentals — applied cleanly — produce a professional, interactive UI with very little code. The project keeps state minimal, components focused, and styling fast with Tailwind.
+
+**Key achievements:**
+- ✅ Circular prev/next navigation with zero edge-case bugs
+- ✅ One-line random picker via `Math.random()` in the state setter
+- ✅ Offset avatar shadow effect using pure CSS layering — no image libraries
+- ✅ Fully responsive card layout using Tailwind breakpoint utilities
+- ✅ Clean prop contracts — each component receives only what it renders
+
+---
+
+## Future Work
+
+- [ ] Add **CSS or Framer Motion transitions** between reviewer cards for animated slide effect
+- [ ] Connect to a **real testimonials API** or CMS to replace static data
+- [ ] Add **star ratings** per reviewer rendered dynamically from data
+- [ ] Implement **auto-play mode** with a configurable interval using `useEffect`
+- [ ] Add **dot indicators** below the card to show position in the carousel
+- [ ] Deploy to **Vercel** with CI/CD via GitHub Actions
+
+---
+
+## Author and Contact
+
+**Developed by:** Manas Gulati
+
+- **GitHub:** [github.com/ManasGulati](https://github.com/ManasGulati)
+- **LinkedIn:** [linkedin.com/in/manasgulatiryu](https://linkedin.com/in/manasgulatiryu)
+- **Email:** manasgulati222@gmail.com
+
+---
+
+> Built with React 19, Tailwind CSS, and react-icons.
